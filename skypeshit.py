@@ -24,9 +24,9 @@ class Daemon(object):
         while True:
             time.sleep(1)
             if self.target_chats:
-                message_chance = int(60 * 60 * 12 / len(self.target_chats))
+                message_chance = int(60 * 60 * 24 / len(self.target_chats))
                 if random.randint(1, message_chance) == 1:
-                    self.send_skype(self.random_line(settings.MESSAGES_FILE), self.target_chats[0])
+                    self.send_skype(self.random_line(settings.MESSAGES_FILE), random.choice(self.target_chats))
 
     def stop(self):
         pass
