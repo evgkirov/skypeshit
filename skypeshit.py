@@ -15,6 +15,7 @@ class Daemon(object):
         self.setup_skype()
         self.my_last_message = 0
         self.target_chats = [self.skype.Chat(name) for name in settings.TARGET_CHATS]
+        self.is_now_typing = False
 
     def random_line(self, filename):
         lines = [line.strip() for line in open(filename).readlines()]
@@ -53,15 +54,19 @@ class Daemon(object):
     def on_skype_message(self, msg, status):
         if status != 'RECEIVED':
             return
+        if self.is_now_typing:
+            return
         reply_chance = 50
         if time.time() - self.my_last_message < 120:
-            reply_chance = 3
+            reply_chance = 1
         if any([(i in msg.Body.lower()) for i in settings.IRRITATORS]):
             reply_chance = 1
         if random.randint(1, reply_chance) != 1:
             return
-        time.sleep(random.randint(0, 4))
+        self.is_now_typing = True
+        time.sleep(random.randint(0, 20))
         self.send_skype(self.random_line(settings.REPLIES_FILE), msg.Chat)
+        self.is_now_typing = False
 
     def send_skype(self, msg, chat):
         chat.SendMessage(msg)
