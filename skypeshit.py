@@ -55,9 +55,9 @@ class Daemon(object):
             return
         reply_chance = 70
         if time.time() - self.my_last_message < 120:
-            reply_chance = 10
+            reply_chance = 7
         if any([(i in msg.Body.lower()) for i in settings.IRRITATORS]):
-            reply_chance = 1
+            reply_chance = 2
         if random.randint(1, reply_chance) != 1:
             return
         time.sleep(random.randint(0, 20))
