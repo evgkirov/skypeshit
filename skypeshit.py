@@ -54,7 +54,7 @@ class Daemon(object):
         if status != 'RECEIVED':
             return
         reply_chance = 70
-        if time.time() - self.my_last_message < 180:
+        if time.time() - self.my_last_message < 60 * 5:
             reply_chance = 5
         if any([(i in msg.Body.lower()) for i in settings.IRRITATORS]):
             reply_chance = 2
